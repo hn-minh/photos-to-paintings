@@ -40,28 +40,34 @@ def process_image(input_image, style_name):
 with gr.Blocks(theme=gr.themes.Soft()) as demo:
     gr.Markdown(
         """
-        # Style Transfer
-        Tải ảnh của bạn lên và chọn phong cách hội họa yêu thích. Hệ thống sẽ chuyển đổi bức ảnh của bạn thành một tác phẩm nghệ thuật!
+        <div style="text-align: center;">
+            <h1>Style Transfer</h1>
+            <p>Tải ảnh của bạn lên và chọn phong cách hội họa yêu thích.</p>
+        </div>
         """
     )
     
     with gr.Row():
         with gr.Column(scale=1):
-            input_img = gr.Image(type="pil", label="Ảnh của bạn")
-            style_dropdown = gr.Dropdown(
-                choices=["cezanne", "monet", "vangogh"], 
-                value="vangogh", 
-                label="Chọn Phong cách (Style)"
-            )
+            input_img = gr.Image(type="pil", label="Ảnh của bạn", height=300)
+            
+            with gr.Row():
+                style_dropdown = gr.Dropdown(
+                    choices=["cezanne", "monet", "vangogh"], 
+                    value="vangogh", 
+                    label="Chọn Phong cách (Style)"
+                )
+                submit_btn = gr.Button("Chuyển đổi", variant="primary")
+            
             style_ref_img = gr.Image(
-                value=STYLE_IMAGES["vangogh"], 
-                label="Ảnh phong cách gốc trong Dataset", 
-                interactive=False
+                value=STYLE_IMAGES.get("vangogh"), 
+                label="Ảnh phong cách gốc (Tham chiếu)", 
+                interactive=False,
+                height=150
             )
-            submit_btn = gr.Button("Chuyển đổi", variant="primary")
             
         with gr.Column(scale=1):
-            output_img = gr.Image(label="Kết quả")
+            output_img = gr.Image(label="Kết quả", height=450)
             
     style_dropdown.change(
         fn=update_style_reference, 
